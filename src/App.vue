@@ -409,7 +409,10 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
     <div class="split">
       <section class="panel">
         <h2>Tramos del impuesto</h2>
-        <p class="hint">Tasa efectiva sobre renta bruta: {{ pct(resultado.tasaEfectiva) }}</p>
+        <p class="hint">
+          Tasa efectiva sobre renta bruta: {{ pct(resultado.tasaEfectiva) }}
+          · Total del impuesto: {{ soles(resultado.impuestoAnual) }}
+        </p>
         <table class="compact">
           <thead>
             <tr>
