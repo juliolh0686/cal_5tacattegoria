@@ -299,7 +299,7 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
     <section class="selected-retention" aria-live="polite">
       <div>
         <span>Descuento de quinta categoría para {{ retencionSeleccionada.nombre }}</span>
-        <small>Impuesto anual proyectado, distribuido según el procedimiento del mes seleccionado.</small>
+        <small>Saldo del impuesto anual proyectado, repartido entre este mes y los meses restantes del año.</small>
       </div>
       <strong>{{ soles(retencionSeleccionada.retencionMes) }}</strong>
     </section>
@@ -438,8 +438,9 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
       <section class="panel">
         <h2>Retención mensual proyectada</h2>
         <p class="hint">
-          Cada mes se proyecta el impuesto anual con el sueldo vigente y se prorratea
-          entre los meses restantes. Los pagos extraordinarios generan retención adicional.
+          Cada mes se calcula el saldo del impuesto anual proyectado, descontando lo ya
+          retenido, y se reparte entre ese mes y los meses restantes del año. Los pagos
+          extraordinarios generan retención adicional.
         </p>
         <table class="compact">
           <thead>

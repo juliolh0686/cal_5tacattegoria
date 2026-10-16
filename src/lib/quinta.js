@@ -142,15 +142,6 @@ export function proyectarRentaBruta(meses, mesId) {
   }
 }
 
-function divisorRetencion(mesId) {
-  if (mesId <= 3) return 12
-  if (mesId === 4) return 9
-  if (mesId <= 7) return 8
-  if (mesId === 8) return 5
-  if (mesId <= 11) return 4
-  return 1
-}
-
 export function calcularQuinta({ meses, uit }) {
   const uitValor = toNumber(uit)
   const deduccionFija = round2(7 * uitValor)
@@ -161,22 +152,22 @@ export function calcularQuinta({ meses, uit }) {
   const anual = aplicarImpuesto(netaDefinitiva, uitValor)
 
   const retenciones = []
-  let retenidoAcumulado = 0
 
   for (const meta of MESES) {
     const { rentaBrutaProyectada, extraordinarioMes } = proyectarRentaBruta(meses, meta.id)
     const netaProyectada = round2(Math.max(0, rentaBrutaProyectada - deduccionTotal))
     const { impuesto: impuestoProyectado, detalle } = aplicarImpuesto(netaProyectada, uitValor)
+    const retenidoAcumulado = round2(
+      meses
+        .slice(0, meta.id - 1)
+        .reduce((acc, mes) => acc + Math.max(0, toNumber(mes.pagoACuenta)), 0),
+    )
 
-    let retencionOrdinaria = 0
-    if (meta.id <= 3) {
-      retencionOrdinaria = round2(impuestoProyectado / 12)
-    } else if (meta.id === 12) {
-      retencionOrdinaria = round2(impuestoProyectado - retenidoAcumulado)
-    } else {
-      const divisor = divisorRetencion(meta.id)
-      retencionOrdinaria = round2((impuestoProyectado - retenidoAcumulado) / divisor)
-    }
+    // Incluye el mes actual en los meses pendientes (octubre, noviembre y
+    // diciembre son 3) y descuenta las retenciones ya ingresadas previamente.
+    const mesesPorPagar = 13 - meta.id
+    const saldoProyectado = Math.max(0, round2(impuestoProyectado - retenidoAcumulado))
+    let retencionOrdinaria = round2(saldoProyectado / mesesPorPagar)
     retencionOrdinaria = Math.max(0, retencionOrdinaria)
 
     let retencionAdicional = 0
@@ -187,7 +178,6 @@ export function calcularQuinta({ meses, uit }) {
     }
 
     const retencionMes = round2(retencionOrdinaria + retencionAdicional)
-    retenidoAcumulado = round2(retenidoAcumulado + retencionMes)
 
     const pagoACuenta = Math.max(0, toNumber(meses[meta.id - 1].pagoACuenta))
 
@@ -225,7 +215,7 @@ export function calcularQuinta({ meses, uit }) {
     detalleTramos: anual.detalle,
     tasaEfectiva,
     retenciones,
-    totalRetenido: retenidoAcumulado,
+    totalRetenido: round2(retenciones.reduce((acc, mes) => acc + mes.retencionMes, 0)),
     totalPagosACuenta,
     saldoFinal,
     diferencia: saldoFinal,
