@@ -147,6 +147,10 @@ function normalizarNombre() {
 function bonificacionGratificacion(mes) {
   return round2(Math.max(0, toNumber(mes.gratificacion)) * 0.09)
 }
+
+function actualizarGratificacionTotal(mes, totalIngresado) {
+  mes.gratificacion = round2(Math.max(0, toNumber(totalIngresado)) / 1.09)
+}
 </script>
 
 <template>
@@ -304,7 +308,7 @@ function bonificacionGratificacion(mes) {
       <div class="panel-head panel-head-remuneraciones">
         <h2>Remuneraciones del ejercicio</h2>
         <p class="hint">
-          Ordinario: sueldo, asignación familiar y conceptos fijos. Variable: horas extra,
+          Ordinario: sueldo, asignación familiar y conceptos fijos. Ocasional: horas extra,
           comisiones. Gratificación: Fiestas Patrias y Navidad más bonificación extraordinaria
           del 9%. Extraordinario: utilidades
           y bonos. Pago a cuenta: retención de quinta declarada en el mes (PLAME). La CTS
@@ -318,9 +322,8 @@ function bonificacionGratificacion(mes) {
             <tr>
               <th>Mes</th>
               <th>Ordinario</th>
-              <th>Variable</th>
-              <th>Gratificación base</th>
-              <th>Bonificación extraord. (9%)</th>
+              <th>Ocasional</th>
+              <th>Gratificación total (incluye 9%)</th>
               <th>Extraordinario</th>
               <th>Pago a cuenta</th>
               <th>Total mes</th>
@@ -336,15 +339,18 @@ function bonificacionGratificacion(mes) {
                 <input v-model.number="mes.variable" type="number" min="0" step="0.01" />
               </td>
               <td>
-                <input
-                  v-model.number="mes.gratificacion"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  :disabled="mes.id !== 7 && mes.id !== 12"
-                />
+                <template v-if="mes.id === 7 || mes.id === 12">
+                  <input
+                    :value="round2(toNumber(mes.gratificacion) + bonificacionGratificacion(mes))"
+                    @change="actualizarGratificacionTotal(mes, $event.target.value)"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    aria-label="Gratificación total con bonificación del 9%"
+                  />
+                </template>
+                <input v-else :value="0" type="number" disabled aria-label="Sin gratificación este mes" />
               </td>
-              <td class="num">{{ soles(bonificacionGratificacion(mes)) }}</td>
               <td>
                 <input v-model.number="mes.extraordinario" type="number" min="0" step="0.01" />
               </td>
@@ -357,7 +363,7 @@ function bonificacionGratificacion(mes) {
           <tfoot>
             <tr>
               <th>Total anual</th>
-              <td colspan="5"></td>
+              <td colspan="4"></td>
               <td class="num">{{ soles(resultado.totalPagosACuenta) }}</td>
               <td class="num">{{ soles(resultado.rentaBruta) }}</td>
             </tr>
