@@ -31,7 +31,8 @@ export const TRAMOS = [
 ]
 
 export function round2(value) {
-  return Math.round((Number(value) || 0) * 100) / 100
+  const number = Number(value) || 0
+  return Math.round((number + Math.sign(number) * Number.EPSILON * Math.abs(number)) * 100) / 100
 }
 
 export function toNumber(value) {
@@ -160,14 +161,16 @@ export function calcularQuinta({ meses, uit }) {
     const retenidoAcumulado = round2(
       meses
         .slice(0, meta.id - 1)
-        .reduce((acc, mes) => acc + Math.max(0, toNumber(mes.pagoACuenta)), 0),
+        .reduce((centimos, mes) => centimos + Math.round(Math.max(0, toNumber(mes.pagoACuenta)) * 100), 0) /
+        100,
     )
 
     // Incluye el mes actual en los meses pendientes (octubre, noviembre y
     // diciembre son 3) y descuenta las retenciones ya ingresadas previamente.
-    const mesesPorPagar = 13 - meta.id
-    const saldoProyectado = Math.max(0, round2(impuestoProyectado - retenidoAcumulado))
-    let retencionOrdinaria = round2(saldoProyectado / mesesPorPagar)
+    // El mes del cálculo también cuenta: enero divide entre 12 y diciembre entre 1.
+    const mesesPorPagar = MESES.length - meta.id + 1
+    const saldoPendiente = Math.max(0, round2(impuestoProyectado - retenidoAcumulado))
+    let retencionOrdinaria = round2(saldoPendiente / mesesPorPagar)
     retencionOrdinaria = Math.max(0, retencionOrdinaria)
 
     let retencionAdicional = 0
@@ -191,6 +194,8 @@ export function calcularQuinta({ meses, uit }) {
       retencionAdicional,
       retencionMes,
       retenidoAcumulado,
+      saldoPendiente,
+      mesesPorPagar,
       pagoACuenta,
       totalMes: totalMes(meses[meta.id - 1]),
       detalleTramos: detalle,

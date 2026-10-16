@@ -437,14 +437,6 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
 
       <section class="panel">
         <h2>Retención mensual proyectada</h2>
-        <p class="hint">
-          El impuesto anual proyectado se estima con las remuneraciones y gratificaciones
-          registradas arriba. La retención puede variar: cada fila estima el monto si el cálculo
-          se realiza en ese mes, descontando los pagos a cuenta de meses anteriores y repartiendo
-          el saldo entre ese mes y los que quedan del año (octubre a diciembre son 3 meses).
-          Los pagos extraordinarios generan retención adicional. Las retenciones de distintas
-          filas son escenarios mensuales y no se deben sumar entre sí.
-        </p>
         <table class="compact">
           <thead>
             <tr>
