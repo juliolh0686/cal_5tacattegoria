@@ -438,15 +438,18 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
       <section class="panel">
         <h2>Retención mensual proyectada</h2>
         <p class="hint">
-          Cada mes se calcula el saldo del impuesto anual proyectado, descontando lo ya
-          retenido, y se reparte entre ese mes y los meses restantes del año. Los pagos
-          extraordinarios generan retención adicional.
+          El impuesto anual proyectado se estima con las remuneraciones y gratificaciones
+          registradas arriba. La retención puede variar: cada fila estima el monto si el cálculo
+          se realiza en ese mes, descontando los pagos a cuenta de meses anteriores y repartiendo
+          el saldo entre ese mes y los que quedan del año (octubre a diciembre son 3 meses).
+          Los pagos extraordinarios generan retención adicional. Las retenciones de distintas
+          filas son escenarios mensuales y no se deben sumar entre sí.
         </p>
         <table class="compact">
           <thead>
             <tr>
               <th>Mes</th>
-              <th>Proyectado</th>
+              <th>Impuesto anual proyectado</th>
               <th>Ordinaria</th>
               <th>Adicional</th>
               <th>Retención</th>
@@ -465,8 +468,7 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
           </tbody>
           <tfoot>
             <tr>
-              <th colspan="4">Totales</th>
-              <td class="num">{{ soles(resultado.totalRetenido) }}</td>
+              <th colspan="5">Total de pagos a cuenta registrados</th>
               <td class="num">{{ soles(resultado.totalPagosACuenta) }}</td>
             </tr>
           </tfoot>
