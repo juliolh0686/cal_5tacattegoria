@@ -143,6 +143,10 @@ function imprimirResumen() {
 function normalizarNombre() {
   form.trabajador = String(form.trabajador ?? '').toLocaleUpperCase('es-PE')
 }
+
+function bonificacionGratificacion(mes) {
+  return round2(Math.max(0, toNumber(mes.gratificacion)) * 0.09)
+}
 </script>
 
 <template>
@@ -315,7 +319,8 @@ function normalizarNombre() {
               <th>Mes</th>
               <th>Ordinario</th>
               <th>Variable</th>
-              <th>Gratificación base (+ 9%)</th>
+              <th>Gratificación base</th>
+              <th>Bonificación extraord. (9%)</th>
               <th>Extraordinario</th>
               <th>Pago a cuenta</th>
               <th>Total mes</th>
@@ -339,6 +344,7 @@ function normalizarNombre() {
                   :disabled="mes.id !== 7 && mes.id !== 12"
                 />
               </td>
+              <td class="num">{{ soles(bonificacionGratificacion(mes)) }}</td>
               <td>
                 <input v-model.number="mes.extraordinario" type="number" min="0" step="0.01" />
               </td>
@@ -351,7 +357,7 @@ function normalizarNombre() {
           <tfoot>
             <tr>
               <th>Total anual</th>
-              <td colspan="4"></td>
+              <td colspan="5"></td>
               <td class="num">{{ soles(resultado.totalPagosACuenta) }}</td>
               <td class="num">{{ soles(resultado.rentaBruta) }}</td>
             </tr>
