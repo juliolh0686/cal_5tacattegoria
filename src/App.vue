@@ -103,6 +103,8 @@ function aplicarSueldo() {
   form.meses.forEach((mes) => {
     mes.ordinario = monto
   })
+  form.meses[6].gratificacion = monto
+  form.meses[11].gratificacion = monto
 }
 
 function limpiar() {
