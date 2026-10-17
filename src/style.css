@@ -1,18 +1,20 @@
 :root {
-  --ink: #1b241c;
-  --muted: #5c675d;
-  --paper: #f4efe6;
-  --card: #fffdf8;
-  --line: #d9d0c2;
-  --accent: #1f6b4a;
-  --accent-dark: #164c35;
-  --gold: #c4a35a;
-  --shadow: 0 18px 40px rgba(27, 36, 28, 0.08);
-  font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --ink: #18323a;
+  --muted: #5c7072;
+  --paper: #f3f7f6;
+  --card: #ffffff;
+  --line: #dce6e3;
+  --accent: #176b55;
+  --accent-dark: #124d42;
+  --gold: #bc8734;
+  --shadow: 0 16px 36px rgba(24, 50, 58, 0.07);
+  font-family: 'Aptos', 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
   color: var(--ink);
   background: var(--paper);
   line-height: 1.45;
-  font-weight: 430;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
 }
 
 * {
@@ -22,24 +24,31 @@
 body {
   margin: 0;
   min-width: 320px;
+  width: 100%;
+  overflow-x: hidden;
   background:
-    radial-gradient(circle at top right, rgba(31, 107, 74, 0.12), transparent 28%),
+    radial-gradient(circle at 100% 0, rgba(23, 107, 85, 0.09), transparent 30%),
     var(--paper);
 }
 
 #app {
   max-width: 1180px;
+  width: 100%;
+  min-width: 0;
   margin: 0 auto;
   padding: 32px 20px 64px;
 }
 
 .page {
   display: grid;
+  width: 100%;
+  min-width: 0;
   gap: 20px;
 }
 
 .app-footer {
   max-width: 1180px;
+  width: 100%;
   margin: 4px auto 0;
   padding: 16px 20px 24px;
   border-top: 1px solid var(--line);
@@ -78,7 +87,9 @@ body {
 .hero h1 {
   margin: 6px 0 10px;
   font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.12;
   letter-spacing: -0.03em;
+  font-weight: 750;
 }
 
 .hero-top {
@@ -102,8 +113,8 @@ body {
 .eyebrow {
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  font-size: 0.7rem;
   color: var(--accent-dark);
   font-weight: 700;
 }
@@ -122,9 +133,10 @@ small {
 }
 
 .panel {
+  min-width: 0;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: 16px;
   padding: 22px;
   box-shadow: var(--shadow);
 }
@@ -152,6 +164,8 @@ small {
 h2 {
   margin: 0 0 12px;
   font-size: 1.15rem;
+  letter-spacing: -0.015em;
+  font-weight: 700;
 }
 
 .actions,
@@ -181,7 +195,8 @@ select {
 
 input:focus,
 select:focus {
-  outline: 2px solid rgba(31, 107, 74, 0.35);
+  outline: 3px solid rgba(23, 107, 85, 0.2);
+  outline-offset: 1px;
   border-color: var(--accent);
 }
 
@@ -223,6 +238,7 @@ button {
   font: inherit;
   font-weight: 650;
   cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
 }
 
 .primary {
@@ -234,6 +250,11 @@ button {
   background: var(--accent-dark);
 }
 
+button:focus-visible {
+  outline: 3px solid rgba(23, 107, 85, 0.32);
+  outline-offset: 2px;
+}
+
 .ghost {
   background: transparent;
   color: var(--accent-dark);
@@ -242,11 +263,26 @@ button {
 
 .table-wrap {
   overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  border-radius: 8px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+}
+
+.table-wrap table {
+  min-width: 900px;
+}
+
+.compact {
+  min-width: 560px;
+}
+
+.table-wrap table.compact {
+  min-width: 560px;
 }
 
 th,
@@ -255,6 +291,17 @@ td {
   padding: 8px 6px;
   border-bottom: 1px solid var(--line);
   font-size: 0.92rem;
+}
+
+thead th {
+  background: #edf5f2;
+  color: #294d49;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+tbody tr:hover {
+  background: rgba(23, 107, 85, 0.035);
 }
 
 .compact th,
@@ -300,7 +347,7 @@ td input {
   gap: 18px;
   padding: 20px 24px;
   border-radius: 16px;
-  background: var(--accent-dark);
+  background: linear-gradient(120deg, #124d42, #176b55);
   color: #f7f3ea;
 }
 
@@ -326,7 +373,7 @@ td input {
 .kpi-grid article {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 14px;
   padding: 16px 18px;
 }
 
@@ -361,7 +408,7 @@ td input {
 .saldo-grid article {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 14px;
   padding: 16px 18px;
 }
 
@@ -392,23 +439,44 @@ td input {
   gap: 16px;
 }
 
+.split > *,
+.table-wrap {
+  min-width: 0;
+}
+
 .legal {
   font-size: 0.8rem;
   margin: 14px 0 0;
 }
 
 @media (max-width: 960px) {
-  .grid-4,
-  .grid-3,
+  #app {
+    padding: 24px 20px 48px;
+  }
+
+  .grid-4 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .grid-2,
-  .kpi-grid,
-  .saldo-grid,
+  .grid-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .saldo-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .split {
     grid-template-columns: 1fr;
   }
 
   .panel-head {
-    flex-direction: column;
+    align-items: flex-start;
   }
 
   .panel-head-remuneraciones {
@@ -417,8 +485,229 @@ td input {
   }
 
   .selected-retention {
+    align-items: center;
+  }
+}
+
+@media (max-width: 680px) {
+  #app {
+    padding: 20px 14px 36px;
+  }
+
+  .hero-top {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
+    line-height: 1.12;
+  }
+
+  .lead {
+    font-size: 0.98rem;
+  }
+
+  .print-button,
+  .inline-actions .primary {
+    width: 100%;
+  }
+
+  .panel {
+    padding: 18px 16px;
+    border-radius: 15px;
+  }
+
+  .grid-4,
+  .grid-3,
+  .grid-2,
+  .kpi-grid,
+  .saldo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .grid-4 label:first-child,
+  .grid-2 > label {
+    grid-column: 1 / -1;
+  }
+
+  .fill-row .inline-actions {
+    align-items: stretch;
+    grid-column: 1 / -1;
+    padding-bottom: 0;
+  }
+
+  .panel-head,
+  .panel-head-remuneraciones {
+    gap: 12px;
+  }
+
+  .panel-head-remuneraciones {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .actions button {
+    flex: 1;
+  }
+
+  .selected-retention {
+    align-items: flex-start;
+    padding: 18px;
+  }
+
+  .selected-retention strong {
+    font-size: 1.7rem;
+  }
+
+  .kpi-grid article,
+  .saldo-grid article {
+    min-width: 0;
+    padding: 14px;
+  }
+
+  .kpi-grid strong,
+  .saldo-grid strong {
+    font-size: 1.05rem;
+    overflow-wrap: anywhere;
+  }
+
+  .app-footer {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  input,
+  select {
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  .payroll-table,
+  .payroll-table tbody {
+    display: block;
+    min-width: 0 !important;
+    width: 100%;
+  }
+
+  .payroll-table thead {
+    display: none;
+  }
+
+  .payroll-table tbody {
+    display: grid;
+    gap: 12px;
+  }
+
+  .payroll-table tbody tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 12px;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+    box-shadow: 0 5px 16px rgba(27, 36, 28, 0.05);
+  }
+
+  .payroll-table tbody tr > th {
+    grid-column: 1 / -1;
+    padding: 0 0 8px;
+    border-bottom: 1px solid var(--line);
+    color: var(--accent-dark);
+    font-size: 1rem;
+  }
+
+  .payroll-table tbody tr > td {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 5px;
+    padding: 0;
+    border: 0;
+    font-size: 0.9rem;
+    text-align: left;
+  }
+
+  .payroll-table tbody tr > td::before {
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 650;
+    line-height: 1.25;
+  }
+
+  .payroll-table tbody tr > td input {
+    width: 100%;
+    min-width: 0;
+    padding: 9px 10px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .payroll-table tbody tr > td.num {
+    justify-content: center;
+    font-weight: 700;
+  }
+
+  .payroll-table tfoot {
+    display: grid;
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    background: #eaf1eb;
+  }
+
+  .payroll-table tfoot tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .payroll-table tfoot th {
+    grid-column: 1 / -1;
+    padding: 0 0 6px;
+    color: var(--accent-dark);
+  }
+
+  .payroll-table tfoot td[colspan] {
+    display: none;
+  }
+
+  .payroll-table tfoot td {
+    padding: 0;
+    border: 0;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 420px) {
+  #app {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .grid-4,
+  .grid-3,
+  .grid-2,
+  .kpi-grid,
+  .saldo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-4 label:first-child,
+  .grid-2 > label,
+  .fill-row .inline-actions {
+    grid-column: auto;
+  }
+
+  .footer-author {
+    flex-wrap: wrap;
   }
 }
 

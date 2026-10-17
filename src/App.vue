@@ -296,14 +296,6 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
       </div>
     </section>
 
-    <section class="selected-retention" aria-live="polite">
-      <div>
-        <span>Descuento de quinta categoría para {{ retencionSeleccionada.nombre }}</span>
-        <small>Saldo del impuesto anual proyectado, repartido entre este mes y los meses restantes del año.</small>
-      </div>
-      <strong>{{ soles(retencionSeleccionada.retencionMes) }}</strong>
-    </section>
-
     <section class="panel">
       <div class="panel-head panel-head-remuneraciones">
         <h2>Remuneraciones del ejercicio</h2>
@@ -317,7 +309,7 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
       </div>
 
       <div class="table-wrap">
-        <table>
+        <table class="payroll-table">
           <thead>
             <tr>
               <th>Mes</th>
@@ -332,13 +324,13 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
           <tbody>
             <tr v-for="mes in form.meses" :key="mes.id">
               <th>{{ MESES[mes.id - 1].nombre }}</th>
-              <td>
+              <td data-label="Ordinario">
                 <input v-model.number="mes.ordinario" type="number" min="0" step="0.01" />
               </td>
-              <td>
+              <td data-label="Ocasional">
                 <input v-model.number="mes.variable" type="number" min="0" step="0.01" />
               </td>
-              <td>
+              <td data-label="Gratificación (incluye 9%)">
                 <template v-if="mes.id === 7 || mes.id === 12">
                   <input
                     :value="round2(toNumber(mes.gratificacion) + bonificacionGratificacion(mes))"
@@ -351,13 +343,13 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
                 </template>
                 <input v-else :value="0" type="number" disabled aria-label="Sin gratificación este mes" />
               </td>
-              <td>
+              <td data-label="Extraordinario">
                 <input v-model.number="mes.extraordinario" type="number" min="0" step="0.01" />
               </td>
-              <td>
+              <td data-label="Pago a cuenta">
                 <input v-model.number="mes.pagoACuenta" type="number" min="0" step="0.01" />
               </td>
-              <td class="num">{{ soles(resultado.retenciones[mes.id - 1].totalMes) }}</td>
+              <td class="num" data-label="Total del mes">{{ soles(resultado.retenciones[mes.id - 1].totalMes) }}</td>
             </tr>
           </tbody>
           <tfoot>
@@ -406,6 +398,14 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
       </article>
     </section>
 
+    <section class="selected-retention" aria-live="polite">
+      <div>
+        <span>Descuento de quinta categoría para {{ retencionSeleccionada.nombre }}</span>
+        <small>Saldo del impuesto anual proyectado, repartido entre este mes y los meses restantes del año.</small>
+      </div>
+      <strong>{{ soles(retencionSeleccionada.retencionMes) }}</strong>
+    </section>
+
     <div class="split">
       <section class="panel">
         <h2>Tramos del impuesto</h2>
@@ -413,6 +413,7 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
           Tasa efectiva sobre renta bruta: {{ pct(resultado.tasaEfectiva) }}
           · Total del impuesto: {{ soles(resultado.impuestoAnual) }}
         </p>
+        <div class="table-wrap">
         <table class="compact">
           <thead>
             <tr>
@@ -431,6 +432,7 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
             </tr>
           </tbody>
         </table>
+        </div>
         <p class="legal">
           UIT {{ form.ejercicio }}: {{ soles(form.uit) }}. Deducción fija 7 UIT =
           {{ soles(resultado.deduccionFija) }}. Referencia: art. 53° LIR y procedimiento de
@@ -440,6 +442,7 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
 
       <section class="panel">
         <h2>Retención mensual proyectada</h2>
+        <div class="table-wrap">
         <table class="compact">
           <thead>
             <tr>
@@ -468,8 +471,10 @@ function actualizarGratificacionTotal(mes, totalIngresado) {
             </tr>
           </tfoot>
         </table>
+        </div>
       </section>
     </div>
+
   </div>
   <footer class="app-footer">
     <span class="footer-brand">Cálculo de Renta de Quinta Categoría</span>
